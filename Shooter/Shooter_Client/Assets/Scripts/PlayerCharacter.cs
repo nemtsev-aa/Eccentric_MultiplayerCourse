@@ -1,18 +1,21 @@
 using UnityEngine;
 
-public class PlayerCharacter : MonoBehaviour {
+public class PlayerCharacter : Character {
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Transform _cameraPoint;
     [SerializeField] Transform _head;
     [SerializeField] float _minHeadAngle = -90f;
     [SerializeField] float _maxHeadAngle = 90f;
-    [SerializeField] private float _speed = 2f;
     [SerializeField] private float _jumpForce = 5f;
+    [SerializeField] private CheckFly _checkFly;
+    [SerializeField] private float _jumpDelay = 0.2f;
 
     private float _inputH;
     private float _inputV;
     private float _rotateY;
     private float _currentRotateX;
+    private float _jumpTime;
+
 
     private void Start() {
         Transform camera = Camera.main.transform;
@@ -38,7 +41,8 @@ public class PlayerCharacter : MonoBehaviour {
 
         Vector3 velocity = (transform.forward * _inputV + transform.right * _inputH).normalized;
         velocity.y = _rigidbody.velocity.y;
-        _rigidbody.velocity = velocity;
+        Velocity = velocity;
+        _rigidbody.velocity = Velocity;
     }
 
     public void GetMoveInfo(out Vector3 position, out Vector3 velocity) {
@@ -56,21 +60,11 @@ public class PlayerCharacter : MonoBehaviour {
         _rotateY = 0;
     }
 
-    private bool _isFly = true;
-    private void OnCollisionStay(Collision collision) {
-        var contactPoints = collision.contacts;
-        for (int i = 0; i < contactPoints.Length; i++) {
-            if (contactPoints[i].normal.y > 0.45f) _isFly = false;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision) {
-        _isFly = true;
-    }
-
-
     public void Jump() {
-        if (_isFly) return;
+        if (_checkFly.IsFly) return;
+        if (Time.time - _jumpTime < _jumpDelay) return;
+
+        _jumpTime = Time.time;
         _rigidbody.AddForce(0, _jumpForce, 0, ForceMode.VelocityChange);
     }
 }
