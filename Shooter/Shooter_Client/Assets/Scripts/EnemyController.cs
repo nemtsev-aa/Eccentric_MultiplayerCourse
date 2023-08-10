@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour {
 
     [SerializeField] private EnemyCharacter _enemyCharacter;
+    [SerializeField] private EnemyGun _enemyGun;
     private List<float> _receiveTimeIntervals = new List<float> { 0f, 0f, 0f, 0f, 0f};
     private float _lastReceiveTime = 0f;
     private Player _player;
@@ -22,6 +23,12 @@ public class EnemyController : MonoBehaviour {
 
         _receiveTimeIntervals.Add(interval);
         _receiveTimeIntervals.Remove(0);
+    }
+
+    public void Shoot(in ShootInfo info) {
+        Vector3 position = new Vector3(info.pX, info.pY, info.pZ);
+        Vector3 velocity = new Vector3(info.dX, info.dY, info.dZ);
+        _enemyGun.Shoot(position, velocity);
     }
 
     internal void OnChange(List<DataChange> changes) {

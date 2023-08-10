@@ -1,33 +1,29 @@
 using System;
 using UnityEngine;
 
-public class PlayerGun : MonoBehaviour {
-
-    [SerializeField] private Bullet _bullet;
+public class PlayerGun : Gun {
     [SerializeField] private Transform _bulletCreator;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _shootDelay;
     private float _lastShootTime;
-    public Action OnShoot;
-
+    
     public bool TryShoot(out ShootInfo info) {
         info = new ShootInfo();
         if (Time.time - _lastShootTime < _shootDelay) return false;
 
         Vector3 position = _bulletCreator.position;
-        Vector3 direction = _bulletCreator.forward;
+        Vector3 velocity = _bulletCreator.forward * _bulletSpeed;
 
         _lastShootTime = Time.time;
-        Instantiate(_bullet, _bulletCreator.position, _bulletCreator.rotation).Init(_bulletCreator.forward, _bulletSpeed);
+        Instantiate(_bullet, position, _bulletCreator.rotation).Init(velocity);
         OnShoot?.Invoke();
 
-        direction *= _bulletSpeed;
         info.pX = position.x;
         info.pY = position.y;
         info.pZ = position.z;
-        info.dX = direction.x;
-        info.dY = direction.y;
-        info.dZ = direction.z;
+        info.dX = velocity.x;
+        info.dY = velocity.y;
+        info.dZ = velocity.z;
 
         return true;
     }

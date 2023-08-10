@@ -152,7 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bullet: {fileID: 846502672773443201, guid: f215f55a96c2d6a4791550749c42e870, type: 3}
   _bulletCreator: {fileID: 251107436443981639}
-  _bulletSpeed: 50
+  _bulletSpeed: 10
   _shootDelay: 0.2
 --- !u!114 &5351728011114218413
 MonoBehaviour:

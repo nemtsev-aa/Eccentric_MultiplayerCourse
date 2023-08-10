@@ -7,7 +7,8 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
     [SerializeField] private PlayerCharacter _playerPrefab;
     [SerializeField] private EnemyController _enemyPrefab;
     private ColyseusRoom<State> _room;
-    
+    private Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
+
     protected override void Awake() {
         base.Awake();
         Instance.InitializeClient();
@@ -20,6 +21,18 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
 
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
         _room.OnStateChange += OnChange;
+        _room.OnMessage<string>("Shoot", ApplyShoot);
+    }
+
+    private void ApplyShoot(string jsonShootInfo) {
+        ShootInfo shootInfo = JsonUtility.FromJson<ShootInfo>(jsonShootInfo);
+
+        if (_enemies.ContainsKey(shootInfo.key) == false) {
+            Debug.LogError("ApplyShoot: зарегистрирован выстрел от несуществующего врага!");
+            return;
+        }
+
+        _enemies[shootInfo.key].Shoot(shootInfo);
     }
 
     private void OnChange(State state, bool isFirstState) {
@@ -43,11 +56,16 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
         var position = new Vector3(player.pX, player.pY, player.pZ);
         var enemy = Instantiate(_enemyPrefab, position, Quaternion.identity);
         enemy.Init(player);
-
+        _enemies.Add(key, enemy);
     }
 
     private void RemoveEnemy(string key, Player player) {
+        if (_enemies.ContainsKey(key) == false) return;
 
+        var enemy = _enemies[key];
+        _enemies.Remove(key);
+        
+        enemy.Destroy();
     }
 
     public void SendMessage(string key, Dictionary<string, object> data) {
