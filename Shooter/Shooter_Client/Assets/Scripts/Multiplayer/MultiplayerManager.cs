@@ -31,12 +31,12 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
     }
 
     private void CreatePlayer(Player player) {
-        var position = new Vector3(player.x, 0f, player.y);
+        var position = new Vector3(player.pX, player.pY, player.pZ);
         Instantiate(_playerPrefab, position, Quaternion.identity);
     }
 
     private void CreateEnemy(string key, Player player) {
-        var position = new Vector3(player.x, 0f, player.y);
+        var position = new Vector3(player.pX, player.pY, player.pZ);
         var enemy = Instantiate(_enemyPrefab, position, Quaternion.identity);
         player.OnChange += enemy.OnChange;
     }
