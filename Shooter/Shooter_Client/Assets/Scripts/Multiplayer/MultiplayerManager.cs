@@ -14,7 +14,11 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
         Connect();
     }
     private async void Connect() {
-        _room = await Instance.client.JoinOrCreate<State>("state_handler");
+        Dictionary<string, object> data = new Dictionary<string, object>() {
+            {"speed", _playerPrefab.Speed }
+        };
+
+        _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
         _room.OnStateChange += OnChange;
     }
 
@@ -38,7 +42,8 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
     private void CreateEnemy(string key, Player player) {
         var position = new Vector3(player.pX, player.pY, player.pZ);
         var enemy = Instantiate(_enemyPrefab, position, Quaternion.identity);
-        player.OnChange += enemy.OnChange;
+        enemy.Init(player);
+
     }
 
     private void RemoveEnemy(string key, Player player) {

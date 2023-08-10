@@ -8,6 +8,13 @@ public class EnemyController : MonoBehaviour {
     [SerializeField] private EnemyCharacter _enemyCharacter;
     private List<float> _receiveTimeIntervals = new List<float> { 0f, 0f, 0f, 0f, 0f};
     private float _lastReceiveTime = 0f;
+    private Player _player;
+
+    public void Init(Player player) {
+        _player = player;
+        _enemyCharacter.SetSpeed(player.speed);
+        _player.OnChange += OnChange;
+    }
 
     private void SaveReceiveTime() {
         float interval = Time.time - _lastReceiveTime;
@@ -22,7 +29,7 @@ public class EnemyController : MonoBehaviour {
         SaveReceiveTime();
 
         Vector3 position = _enemyCharacter.TargetPosition;
-        Vector3 velocity = Vector3.zero;
+        Vector3 velocity = _enemyCharacter.Velocity;
 
         foreach (var dataChange in changes) {
             switch (dataChange.Field) {
@@ -44,6 +51,12 @@ public class EnemyController : MonoBehaviour {
                 case "vZ":
                     velocity.z = (float)dataChange.Value;
                     break;
+                case "rX":
+                    _enemyCharacter.SetRotateX((float)dataChange.Value);
+                    break;
+                case "rY":
+                    _enemyCharacter.SetRotateY((float)dataChange.Value);
+                    break;
                 default:
                     Debug.LogWarning($"{dataChange.Field} not handled");
                     break;
@@ -51,4 +64,10 @@ public class EnemyController : MonoBehaviour {
         }
         _enemyCharacter.SetMovement(position, velocity, _receiveTimeIntervals.Average());
     }
+
+    public void Destroy() {
+        _player.OnChange -= OnChange;
+        Destroy(gameObject);
+    }
 }
+
