@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour {
 
     [SerializeField] private EnemyCharacter _enemyCharacter;
     [SerializeField] private EnemyGun _enemyGun;
+    [SerializeField] private Squat _squat;
     private List<float> _receiveTimeIntervals = new List<float> { 0f, 0f, 0f, 0f, 0f};
     private float _lastReceiveTime = 0f;
     private Player _player;
@@ -14,6 +15,7 @@ public class EnemyController : MonoBehaviour {
     public void Init(Player player) {
         _player = player;
         _enemyCharacter.SetSpeed(player.speed);
+        _enemyCharacter.SetSpeedSquat(player.spSqt);
         _player.OnChange += OnChange;
     }
 
@@ -63,6 +65,12 @@ public class EnemyController : MonoBehaviour {
                     break;
                 case "rY":
                     _enemyCharacter.SetRotateY((float)dataChange.Value);
+                    break;
+                case "sq":
+                    _squat.SetSquatState((bool)dataChange.Value);
+                    break;
+                case "spSqt":
+                    _enemyCharacter.SetSpeedSquat((float)dataChange.Value);
                     break;
                 default:
                     Debug.LogWarning($"{dataChange.Field} not handled");

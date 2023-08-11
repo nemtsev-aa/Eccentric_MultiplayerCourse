@@ -4,6 +4,7 @@ using UnityEngine;
 public class Controller : MonoBehaviour {
     [SerializeField] private PlayerCharacter _player;
     [SerializeField] private PlayerGun _gun;
+    [SerializeField] private Squat _squat;
     [SerializeField] private float _mouseSensetivity = 2f;
     private MultiplayerManager _multiplayerManager;
 
@@ -18,12 +19,19 @@ public class Controller : MonoBehaviour {
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        bool space = Input.GetKeyDown(KeyCode.Space);
+        _player.SetInput(h, v, -mouseY * _mouseSensetivity, mouseX * _mouseSensetivity);
 
-        _player.SetInput(h,v, mouseX * _mouseSensetivity);
-        _player.RotateX(-mouseY * _mouseSensetivity);
-        if (space) {
-            _player.Jump();
+        bool space = Input.GetKeyDown(KeyCode.Space);
+        if (space) _player.Jump();
+
+        if (Input.GetKeyDown(KeyCode.LeftControl)) {
+            _squat.SetSquatState(true);
+            SendSquat();
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftControl)) {
+            _squat.SetSquatState(false);
+            SendSquat();
         }
 
         bool isShoot = Input.GetMouseButton(0);
@@ -51,6 +59,13 @@ public class Controller : MonoBehaviour {
             {"rY", rotateY }
         };
         _multiplayerManager.SendMessage("move", data);
+    }
+
+    private void SendSquat() {
+        Dictionary<string, object> data = new Dictionary<string, object>(){
+            { "sq", _squat.IsSquating },
+        };
+        _multiplayerManager.SendMessage("squat", data);
     }
 }
 

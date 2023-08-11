@@ -12,6 +12,7 @@ public class PlayerCharacter : Character {
 
     private float _inputH;
     private float _inputV;
+    private float _rotateX;
     private float _rotateY;
     private float _currentRotateX;
     private float _jumpTime;
@@ -24,21 +25,23 @@ public class PlayerCharacter : Character {
         camera.localRotation = Quaternion.identity;
     }
 
+    private void Update() {
+        RotateX(_rotateX);
+    }
+
     private void FixedUpdate() {
         Move();
         RotateY();
     }
 
-    public void SetInput(float h, float v, float rotateY) {
+    public void SetInput(float h, float v, float rotateX, float rotateY) {
         _inputH = h;
         _inputV = v;
+        _rotateX = rotateX;
         _rotateY += rotateY;
     }
 
     private void Move() {
-        //Vector3 direction = new Vector3(_inputH, 0, _inputV).normalized;
-        //transform.position += direction * Time.deltaTime * _speed;
-
         Vector3 velocity = (transform.forward * _inputV + transform.right * _inputH).normalized * Speed;
         velocity.y = _rigidbody.velocity.y;
         Velocity = velocity;
@@ -58,7 +61,7 @@ public class PlayerCharacter : Character {
     }
 
     private void RotateY() {
-        _rigidbody.angularVelocity = new Vector3(0, _rotateY, 0);
+        _rigidbody.angularVelocity = new Vector3(0f, _rotateY, 0f);
         _rotateY = 0;
     }
 

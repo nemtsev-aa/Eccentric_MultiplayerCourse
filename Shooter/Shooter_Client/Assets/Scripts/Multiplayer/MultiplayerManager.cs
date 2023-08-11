@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
-    [SerializeField] private PlayerCharacter _playerPrefab;
+    [SerializeField] private PlayerCharacter _player;
     [SerializeField] private EnemyController _enemyPrefab;
     private ColyseusRoom<State> _room;
     private Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
@@ -16,7 +16,8 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
     }
     private async void Connect() {
         Dictionary<string, object> data = new Dictionary<string, object>() {
-            {"speed", _playerPrefab.Speed }
+            {"speed", _player.Speed },
+            {"spSqt", _player.SquatingSpeed }
         };
 
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
@@ -49,7 +50,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
 
     private void CreatePlayer(Player player) {
         var position = new Vector3(player.pX, player.pY, player.pZ);
-        Instantiate(_playerPrefab, position, Quaternion.identity);
+        Instantiate(_player, position, Quaternion.identity);
     }
 
     private void CreateEnemy(string key, Player player) {
