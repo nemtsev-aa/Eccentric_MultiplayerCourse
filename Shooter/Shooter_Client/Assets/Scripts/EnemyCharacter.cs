@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class EnemyCharacter : Character {
+    [SerializeField] private Health _health;
     [SerializeField] private Transform _head;
     public Vector3 TargetPosition { get; private set; } = Vector3.zero;
     [SerializeField] float _rotationSpeed = 15f;
@@ -10,6 +11,12 @@ public class EnemyCharacter : Character {
 
     private void Start() {
         TargetPosition = transform.position;
+    }
+
+    public void SetMaxHP(int value) {
+        MaxHealth = value;
+        _health.SetMax(value);
+        _health.SetCurrent(value);
     }
 
     public void SetSpeed(float value) => Speed = value;
@@ -24,7 +31,10 @@ public class EnemyCharacter : Character {
         }
         _head.localRotation = Quaternion.Lerp(_head.localRotation, Quaternion.Euler(_localEulerAnglesX), Time.deltaTime *_rotationSpeed);
         transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(_localEulerAnglesY), Time.deltaTime * _rotationSpeed);
+    }
 
+    public void ApplyDamage(int damage) {
+        _health.ApplyDamage(damage);
     }
 
     public void SetMovement(in Vector3 position, in Vector3 velocity, in float averageInterval) {

@@ -16,6 +16,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
     }
     private async void Connect() {
         Dictionary<string, object> data = new Dictionary<string, object>() {
+            {"hp", _player.MaxHealth },
             {"speed", _player.Speed },
             {"spSqt", _player.SquatingSpeed }
         };

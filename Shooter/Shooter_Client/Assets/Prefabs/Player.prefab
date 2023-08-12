@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de93b782d0ee2145bcdd6b2bc715ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <MaxHealth>k__BackingField: 10
   <Speed>k__BackingField: 5
   <SquatingSpeed>k__BackingField: 2
   _rigidbody: {fileID: 1146765513770622205}
@@ -188,6 +189,7 @@ MonoBehaviour:
   _bulletCreator: {fileID: 251107436443981639}
   _bulletSpeed: 10
   _shootDelay: 0.2
+  _damage: 1
 --- !u!114 &5351728011114218413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +217,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _body: {fileID: 1222364708199935292}
-  _collider: {fileID: 7498177955645604251}
   _character: {fileID: 4613068469224486918}
 --- !u!1 &4730920247203740803
 GameObject:

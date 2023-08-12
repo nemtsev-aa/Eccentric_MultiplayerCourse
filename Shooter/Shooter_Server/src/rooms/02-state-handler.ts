@@ -6,6 +6,8 @@ export class Player extends Schema {
     speed = 0;
     @type("number")
     spSqt = 0;
+    @type("int8")
+    hp = 0;
 
     @type("number")
     pX = Math.floor((Math.random() * 50) - 25);
@@ -38,6 +40,7 @@ export class State extends Schema {
 
     createPlayer(sessionId: string, data: any) {
         const player = new Player();
+        player.hp = data.hp;
         player.speed = data.speed;
         player.spSqt = data.spSqt;    
         this.players.set(sessionId, player);

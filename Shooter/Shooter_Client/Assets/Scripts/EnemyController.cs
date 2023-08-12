@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour {
 
     public void Init(Player player) {
         _player = player;
+        _enemyCharacter.SetMaxHP(player.hp);
         _enemyCharacter.SetSpeed(player.speed);
         _enemyCharacter.SetSpeedSquat(player.spSqt);
         _player.OnChange += OnChange;
