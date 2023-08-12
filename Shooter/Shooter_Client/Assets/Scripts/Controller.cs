@@ -1,18 +1,24 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Controller : MonoBehaviour {
+    [SerializeField] private float _restartDelay = 3f;
     [SerializeField] private PlayerCharacter _player;
     [SerializeField] private PlayerGun _gun;
     [SerializeField] private Squat _squat;
     [SerializeField] private float _mouseSensetivity = 2f;
     private MultiplayerManager _multiplayerManager;
+    private bool _hold = false;
 
     private void Start() {
         _multiplayerManager = MultiplayerManager.Instance;
     }
 
     private void Update() {
+        if (_hold) return;
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
@@ -67,6 +73,34 @@ public class Controller : MonoBehaviour {
         };
         _multiplayerManager.SendMessage("squat", data);
     }
+
+    public void Restart(string jsonRestartInfo) {
+        RestartInfo info = JsonUtility.FromJson<RestartInfo>(jsonRestartInfo);
+
+        StartCoroutine(Hold());
+
+        _player.transform.position = new Vector3(info.x, 0f, info.z);
+        _player.SetInput(0, 0, 0, 0);
+
+        _player.GetMoveInfo(out Vector3 position, out Vector3 velocity, out float rotateX, out float rotateY);
+        Dictionary<string, object> data = new Dictionary<string, object>() {
+            {"pX", info.x},
+            {"pY", 0},
+            {"pZ", info.z},
+            {"vX", 0},
+            {"vY", 0},
+            {"vZ", 0},
+            {"rX", 0},
+            {"rY", 0}
+        };
+        _multiplayerManager.SendMessage("move", data);
+    }
+
+    private IEnumerator Hold() {
+        _hold = true;
+        yield return new WaitForSecondsRealtime(_restartDelay);
+        _hold = false;
+    }
 }
 
 [System.Serializable]
@@ -78,4 +112,10 @@ public struct ShootInfo {
     public float dX;
     public float dY;
     public float dZ;
+}
+
+[System.Serializable]
+public struct RestartInfo {
+    public float x;
+    public float z;
 }

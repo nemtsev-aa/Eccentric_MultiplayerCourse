@@ -12,9 +12,10 @@ public class EnemyController : MonoBehaviour {
     private float _lastReceiveTime = 0f;
     private Player _player;
 
-    public void Init(Player player) {
+    public void Init(string key, Player player) {
+        _enemyCharacter.Init(key);
         _player = player;
-        _enemyCharacter.SetMaxHP(player.hp);
+        _enemyCharacter.SetMaxHP(player.maxHP);
         _enemyCharacter.SetSpeed(player.speed);
         _enemyCharacter.SetSpeedSquat(player.spSqt);
         _player.OnChange += OnChange;
@@ -43,6 +44,14 @@ public class EnemyController : MonoBehaviour {
 
         foreach (var dataChange in changes) {
             switch (dataChange.Field) {
+                case "loss":
+                    MultiplayerManager.Instance.LossCounter.SetEnemyLoss((byte)dataChange.Value);
+                    break;
+                case "currentHP":
+                    if ((sbyte)dataChange.Value > (sbyte)dataChange.PreviousValue) {
+                        _enemyCharacter.RestoreHP((sbyte)dataChange.Value);
+                    }
+                    break;
                 case "pX":
                     position.x = (float)dataChange.Value;
                     break;

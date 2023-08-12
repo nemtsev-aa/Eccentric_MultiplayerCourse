@@ -16,7 +16,6 @@ public class Squat : MonoBehaviour {
     }
 
     private void SetBodyScale(float value) {
-        Debug.Log($"SetBodyScale: {value}");
         Vector3 newBodyScale = new Vector3(_body.localScale.x, _body.localScale.y, value);
         _body.localScale = Vector3.Lerp(_body.localScale, newBodyScale, Time.deltaTime * _character.SquatingSpeed);
     }

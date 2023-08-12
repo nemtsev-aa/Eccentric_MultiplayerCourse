@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCharacter : Character {
@@ -8,9 +9,14 @@ public class EnemyCharacter : Character {
     private float _velocityMagnitude = 0f;
     private Vector3 _localEulerAnglesX;
     private Vector3 _localEulerAnglesY;
+    private string _sessionID;
 
     private void Start() {
         TargetPosition = transform.position;
+    }
+
+    public void Init(string sessionID) {
+        _sessionID = sessionID;
     }
 
     public void SetMaxHP(int value) {
@@ -19,9 +25,13 @@ public class EnemyCharacter : Character {
         _health.SetCurrent(value);
     }
 
+    public void RestoreHP(int newValue) {
+        _health.SetCurrent(newValue);
+    }
+
     public void SetSpeed(float value) => Speed = value;
     public void SetSpeedSquat(float value) => SquatingSpeed = value;
-
+    
     private void Update() {
         if (_velocityMagnitude > 0.1f) {
             float maxDistance = _velocityMagnitude * Time.deltaTime;                // Максимальная дистанция, которую может пройти враг за единицу времени
@@ -35,6 +45,13 @@ public class EnemyCharacter : Character {
 
     public void ApplyDamage(int damage) {
         _health.ApplyDamage(damage);
+        Dictionary<string, object> data = new Dictionary<string, object>()
+        {
+            {"id", _sessionID },
+            {"value", damage }
+        };
+
+        MultiplayerManager.Instance.SendMessage("damage", data);
     }
 
     public void SetMovement(in Vector3 position, in Vector3 velocity, in float averageInterval) {

@@ -1,6 +1,10 @@
+using Colyseus.Schema;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCharacter : Character {
+    [SerializeField] private Health _health;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Transform _cameraPoint;
     [SerializeField] Transform _head;
@@ -23,6 +27,8 @@ public class PlayerCharacter : Character {
         camera.parent = _cameraPoint;
         camera.localPosition = Vector3.zero;
         camera.localRotation = Quaternion.identity;
+        _health.SetMax(MaxHealth);
+        _health.SetCurrent(MaxHealth);
     }
 
     private void Update() {
@@ -63,6 +69,23 @@ public class PlayerCharacter : Character {
     private void RotateY() {
         _rigidbody.angularVelocity = new Vector3(0f, _rotateY, 0f);
         _rotateY = 0;
+    }
+
+    internal void OnChange(List<DataChange> changes) {
+
+        foreach (var dataChange in changes) {
+            switch (dataChange.Field) {
+                case "loss":
+                    MultiplayerManager.Instance.LossCounter.SetPlayerLoss((byte)dataChange.Value);
+                    break;
+                case "currentHP":
+                    _health.SetCurrent((sbyte)dataChange.Value);
+                    break;               
+                default:
+                    Debug.LogWarning($"{dataChange.Field} not handled");
+                    break;
+            }
+        }
     }
 
     public void Jump() {
