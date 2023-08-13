@@ -4,7 +4,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private float _lifeTime = 5f;
+    [Tooltip("Ёффект попадани€")]
+    protected GameObject _hitParticle;
     private int _damage;
+    private int _ricochet;
 
     public void Init(Vector3 velocity, int damage = 0) {
         _damage = damage;
@@ -15,13 +18,17 @@ public class Bullet : MonoBehaviour {
     private void OnCollisionEnter(Collision collision) {
         if (collision.collider.TryGetComponent(out EnemyCharacter enemyCharacter)) {
             enemyCharacter.ApplyDamage(_damage);
+            Destroy();
         }
-        Destroy();
     }
 
     private IEnumerator DelayDestroy() {
         yield return new WaitForSecondsRealtime(_lifeTime);
         Destroy();
+    }
+
+    public virtual void Ricochet() {
+        _ricochet++;
     }
 
     private void Destroy() {

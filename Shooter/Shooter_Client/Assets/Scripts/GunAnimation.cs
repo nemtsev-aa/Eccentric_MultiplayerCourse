@@ -1,13 +1,14 @@
-using System;
 using UnityEngine;
 
 public class GunAnimation : MonoBehaviour {
     private const string _shoot = "Shoot";
-    [SerializeField] private Gun _gun;
+    [SerializeField] private Armory _armory;
     [SerializeField] private Animator _animator;
 
     private void Start() {
-        _gun.OnShoot += Shoot;
+        foreach (Weapon iWeapon in _armory.Weapons) {
+            iWeapon.OnShot += Shoot;
+        }
     }
 
     private void Shoot() {
@@ -15,6 +16,8 @@ public class GunAnimation : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        _gun.OnShoot -= Shoot;
+        foreach (Weapon iWeapon in _armory.Weapons) {
+            iWeapon.OnShot -= Shoot;
+        }
     }
 }

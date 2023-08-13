@@ -14,17 +14,18 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
         Instance.InitializeClient();
         Connect();
     }
+
     private async void Connect() {
         Dictionary<string, object> data = new Dictionary<string, object>() {
             {"hp", _player.MaxHealth },
             {"speed", _player.Speed },
-            {"spSqt", _player.SquatingSpeed }
+            {"spSqt", _player.SquatingSpeed },
+            {"wID", _player.WeaponID }
         };
 
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
         _room.OnStateChange += OnChange;
         _room.OnMessage<string>("Shoot", ApplyShoot);
-
     }
 
     private void ApplyShoot(string jsonShootInfo) {
@@ -36,6 +37,10 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
         }
 
         _enemies[shootInfo.key].Shoot(shootInfo);
+    }
+
+    private void WeaponChanged(string json) {
+
     }
 
     private void OnChange(State state, bool isFirstState) {

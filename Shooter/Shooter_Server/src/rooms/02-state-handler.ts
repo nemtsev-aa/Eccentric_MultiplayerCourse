@@ -7,9 +7,11 @@ export class Player extends Schema {
 
     @type("int8")
     maxHP = 0;
-
     @type("int8")
     currentHP = 0;
+
+    @type("int8")
+    wID = 0;
 
     @type("number")
     speed = 0;
@@ -50,7 +52,9 @@ export class State extends Schema {
         player.maxHP = data.hp;
         player.currentHP = data.hp;
         player.speed = data.speed;
-        player.spSqt = data.spSqt;    
+        player.spSqt = data.spSqt; 
+        player.wID = data.wID;
+
         this.players.set(sessionId, player);
     }
 
@@ -76,6 +80,10 @@ export class State extends Schema {
     squatPlayer (sessionId: string, data: any) {
         this.players.get(sessionId).sq = data.sq;
     }
+
+    weaponPlayer (sessionId: string, data: any) {
+        this.players.get(sessionId).wID = data.wID;
+    }
 }
 
 export class StateHandlerRoom extends Room<State> {
@@ -97,6 +105,10 @@ export class StateHandlerRoom extends Room<State> {
 
         this.onMessage("squat", (client, data) => {
             this.state.squatPlayer(client.sessionId, data);
+        });
+
+        this.onMessage("wID", (client, data) => {
+            this.state.weaponPlayer(client.sessionId, data); 
         });
 
         this.onMessage("damage", (client, data) => {

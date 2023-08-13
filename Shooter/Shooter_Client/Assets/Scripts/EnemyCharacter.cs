@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCharacter : Character {
     [SerializeField] private Health _health;
     [SerializeField] private Transform _head;
+
     public Vector3 TargetPosition { get; private set; } = Vector3.zero;
     [SerializeField] float _rotationSpeed = 15f;
     private float _velocityMagnitude = 0f;

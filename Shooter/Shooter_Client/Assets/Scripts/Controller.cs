@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine;
 public class Controller : MonoBehaviour {
     [SerializeField] private float _restartDelay = 3f;
     [SerializeField] private PlayerCharacter _player;
-    [SerializeField] private PlayerGun _gun;
+    [SerializeField] private Armory _playerArmory;
     [SerializeField] private Squat _squat;
     [SerializeField] private float _mouseSensetivity = 2f;
     private MultiplayerManager _multiplayerManager;
@@ -14,6 +13,7 @@ public class Controller : MonoBehaviour {
 
     private void Start() {
         _multiplayerManager = MultiplayerManager.Instance;
+        _playerArmory.OnActiveWeaponChanged += SendNewWeaponID;
     }
 
     private void Update() {
@@ -41,8 +41,9 @@ public class Controller : MonoBehaviour {
         }
 
         bool isShoot = Input.GetMouseButton(0);
-        if (isShoot && _gun.TryShoot(out ShootInfo shootInfo)) SendShoot(ref shootInfo);
+        if (isShoot && _playerArmory.ActiveWeapon.TryShoot(out ShootInfo shootInfo)) SendShoot(ref shootInfo);
 
+        SendWeaponID();
         SendMove();
     }
 
@@ -68,6 +69,7 @@ public class Controller : MonoBehaviour {
     }
 
     private void SendSquat() {
+
         Dictionary<string, object> data = new Dictionary<string, object>(){
             { "sq", _squat.IsSquating },
         };
@@ -101,11 +103,44 @@ public class Controller : MonoBehaviour {
         yield return new WaitForSecondsRealtime(_restartDelay);
         _hold = false;
     }
+
+    private void SendWeaponID() {
+        //int currentID = _playerArmory.CurrentWeaponID;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            _playerArmory.SetWeaponID(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            _playerArmory.SetWeaponID(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+            _playerArmory.SetWeaponID(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4)) {
+            _playerArmory.SetWeaponID(3);
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") >= 0.1f) {
+            _playerArmory.SetWeaponID(true);
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) {
+            _playerArmory.SetWeaponID(false);
+        }
+    }
+
+    private void SendNewWeaponID(int value) {
+        Dictionary<string, object> data = new Dictionary<string, object>() { { "wID", value } };
+        _multiplayerManager.SendMessage("wID", data);
+    }
+
+    private void OnDisable() {
+        _playerArmory.OnActiveWeaponChanged -= SendNewWeaponID;
+    }
 }
 
 [System.Serializable]
 public struct ShootInfo {
     public string key;
+    public int weaponID;
     public float pX;
     public float pY;
     public float pZ;

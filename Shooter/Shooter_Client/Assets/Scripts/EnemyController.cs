@@ -8,6 +8,8 @@ public class EnemyController : MonoBehaviour {
     [SerializeField] private EnemyCharacter _enemyCharacter;
     [SerializeField] private EnemyGun _enemyGun;
     [SerializeField] private Squat _squat;
+    [SerializeField] private Armory _armory;
+
     private List<float> _receiveTimeIntervals = new List<float> { 0f, 0f, 0f, 0f, 0f};
     private float _lastReceiveTime = 0f;
     private Player _player;
@@ -48,9 +50,11 @@ public class EnemyController : MonoBehaviour {
                     MultiplayerManager.Instance.LossCounter.SetEnemyLoss((byte)dataChange.Value);
                     break;
                 case "currentHP":
-                    if ((sbyte)dataChange.Value > (sbyte)dataChange.PreviousValue) {
-                        _enemyCharacter.RestoreHP((sbyte)dataChange.Value);
-                    }
+                    if ((sbyte)dataChange.Value > (sbyte)dataChange.PreviousValue) _enemyCharacter.RestoreHP((sbyte)dataChange.Value);
+                    break;
+                case "wID":
+                    Debug.Log($"wID + {(sbyte)dataChange.Value}");
+                    _armory.SetWeaponID((sbyte)dataChange.Value);
                     break;
                 case "pX":
                     position.x = (float)dataChange.Value;

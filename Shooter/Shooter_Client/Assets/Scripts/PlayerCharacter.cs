@@ -95,4 +95,10 @@ public class PlayerCharacter : Character {
         _jumpTime = Time.time;
         _rigidbody.AddForce(0, _jumpForce, 0, ForceMode.VelocityChange);
     }
+
+    //Dictionary<string, object> data = new Dictionary<string, object>(){
+    //        { "wID", _currentGunIndex },
+    //    };
+
+    //MultiplayerManager.Instance.SendMessage("wID", data);
 }
