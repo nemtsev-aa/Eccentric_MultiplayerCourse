@@ -10,6 +10,7 @@ public class RocketLauncher : Weapon {
             if (_numberOfBullets != 0) {
                 Deactivate();
                 Activate();
+                ShowShotEffects();
             }
             return true;
         } else {

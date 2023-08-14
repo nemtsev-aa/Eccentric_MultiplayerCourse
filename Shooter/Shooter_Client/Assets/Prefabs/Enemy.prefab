@@ -1037,6 +1037,7 @@ GameObject:
   - component: {fileID: -6335761578822325203}
   - component: {fileID: 4148206143237451417}
   - component: {fileID: 6954320997774983049}
+  - component: {fileID: 5429659062977215100}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -1156,6 +1157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bullet: {fileID: 846502672773443201, guid: f215f55a96c2d6a4791550749c42e870, type: 3}
   _armory: {fileID: 6954320997774983049}
+  _flashView: {fileID: 5630667702702852500}
 --- !u!114 &3253256561754075644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1214,6 +1216,28 @@ MonoBehaviour:
   - {fileID: 4150503294339058466}
   - {fileID: 6821260459927028011}
   - {fileID: 4635128644758220978}
+--- !u!114 &5429659062977215100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4613068469224486919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a523b7f14f60224d83309042fa7c13b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshRenderers:
+  - {fileID: 6253564013441674428}
+  - {fileID: 5602812373041971318}
+  - {fileID: 3232491904458600516}
+  - {fileID: 7535197137901948318}
+  - {fileID: 1003550787831161845}
+  - {fileID: 3953001460455395464}
+  - {fileID: 647140139556874196}
+  - {fileID: 2489614568874829318}
+  - {fileID: 747272676783510564}
 --- !u!1 &5218427608975120831
 GameObject:
   m_ObjectHideFlags: 0
@@ -2304,6 +2328,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1516616137537723847}
     m_Modifications:
+    - target: {fileID: 514992532426542345, guid: 5a4c39f9b586aa847b31e420ee40d12b,
+        type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2106713321039985312, guid: 5a4c39f9b586aa847b31e420ee40d12b,
         type: 3}
       propertyPath: m_Name
@@ -2364,6 +2393,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4586750423767378394, guid: 5a4c39f9b586aa847b31e420ee40d12b,
+        type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8982494552525379351, guid: 5a4c39f9b586aa847b31e420ee40d12b,
+        type: 3}
+      propertyPath: _armory
+      value: 
+      objectReference: {fileID: 6954320997774983049}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a4c39f9b586aa847b31e420ee40d12b, type: 3}
 --- !u!4 &3436406905530852384 stripped
@@ -2406,6 +2445,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fbdce38bc92c334e977fb1f8e9ebbc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5630667702702852500 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8982494552525379351, guid: 5a4c39f9b586aa847b31e420ee40d12b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3642318381429186179}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 980449b4b4561ec40901dce0b899e497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6821260459927028011 stripped

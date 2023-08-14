@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Weapon : MonoBehaviour {
+    public Transform BulletCreator => _bulletCreator;
+
     [Tooltip("Идентификатор оружия")]
     [SerializeField] private int _weaponID;
     [Tooltip("Расположение генератора пуль")]
@@ -27,7 +29,7 @@ public class Weapon : MonoBehaviour {
 
     [Header("Effects")]
     [Tooltip("Эффект выстрела")]
-    [SerializeField] private GameObject _flash;
+    [SerializeField] private FlashView _flash;
     [Tooltip("Звук выстрела")]
     [SerializeField] private AudioSource _shotSound;
 
@@ -78,7 +80,6 @@ public class Weapon : MonoBehaviour {
             OnShot?.Invoke();
             ShowShotEffects();
             UpdateText();
-            Debug.Log($"Ушло на сервер: {position}, {velocity}");
             return true;
         }
     }
@@ -102,16 +103,17 @@ public class Weapon : MonoBehaviour {
         }
     }
 
-    private void HideFlash() {
-        _flash.SetActive(false);
-    }
-
     public void ShowShotEffects() {
         _shotSound.Play();
         if (_flash == null) return;
 
         _flash.SetActive(true);
         Invoke(nameof(HideFlash), 0.1f);
+    }
+
+    public void HideFlash() {
+        if (_flash == null) return;
+        _flash.SetActive(false);
     }
 
     public virtual void Activate() {

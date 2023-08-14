@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Controller : MonoBehaviour {
+    
     [SerializeField] private float _restartDelay = 3f;
     [SerializeField] private PlayerCharacter _player;
     [SerializeField] private Armory _playerArmory;
@@ -10,20 +11,34 @@ public class Controller : MonoBehaviour {
     [SerializeField] private float _mouseSensetivity = 2f;
     private MultiplayerManager _multiplayerManager;
     private bool _hold = false;
+    private bool _hideCursor;
 
     private void Start() {
         _multiplayerManager = MultiplayerManager.Instance;
         _playerArmory.OnActiveWeaponChanged += SendNewWeaponID;
+        _hideCursor = true;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Cursor.lockState = _hideCursor ? CursorLockMode.Locked : CursorLockMode.None;
+        }
+
         if (_hold) return;
+
+        float mouseX = 0f;
+        float mouseY = 0f;
+        bool isShoot = false;
+
+        if (_hideCursor) {
+            mouseX = Input.GetAxis("Mouse X");
+            mouseY = Input.GetAxis("Mouse Y");
+            isShoot = Input.GetMouseButton(0);
+        }
 
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
 
         _player.SetInput(h, v, -mouseY * _mouseSensetivity, mouseX * _mouseSensetivity);
 
@@ -40,7 +55,7 @@ public class Controller : MonoBehaviour {
             SendSquat();
         }
 
-        bool isShoot = Input.GetMouseButton(0);
+        
         if (isShoot && _playerArmory.ActiveWeapon.TryShoot(out ShootInfo shootInfo)) SendShoot(ref shootInfo);
 
         SendWeaponID();
@@ -76,24 +91,26 @@ public class Controller : MonoBehaviour {
         _multiplayerManager.SendMessage("squat", data);
     }
 
-    public void Restart(string jsonRestartInfo) {
-        RestartInfo info = JsonUtility.FromJson<RestartInfo>(jsonRestartInfo);
-
+    public void Restart(int spawnIndex) {
+        _multiplayerManager.SpawnPoints.GetPoint(spawnIndex, out Vector3 position, out Vector3 rotation);
         StartCoroutine(Hold());
 
-        _player.transform.position = new Vector3(info.x, 0f, info.z);
+        _player.transform.position = position;
+        rotation.x = 0;
+        rotation.z = 0;
+
+        _player.transform.eulerAngles = rotation;
         _player.SetInput(0, 0, 0, 0);
 
-        _player.GetMoveInfo(out Vector3 position, out Vector3 velocity, out float rotateX, out float rotateY);
         Dictionary<string, object> data = new Dictionary<string, object>() {
-            {"pX", info.x},
-            {"pY", 0},
-            {"pZ", info.z},
+            {"pX", position.x},
+            {"pY", position.y},
+            {"pZ", position.z},
             {"vX", 0},
             {"vY", 0},
             {"vZ", 0},
             {"rX", 0},
-            {"rY", 0}
+            {"rY", rotation.y}
         };
         _multiplayerManager.SendMessage("move", data);
     }

@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 34d229f55a3963240ab036768afc7a64
+guid: 8a61914b9484acd4e92f5e3c441d7fdc
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MuzzleFlash
+    second: {fileID: 2100000, guid: 436d67d1f5c6f3b47bc381c85fbdf743, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

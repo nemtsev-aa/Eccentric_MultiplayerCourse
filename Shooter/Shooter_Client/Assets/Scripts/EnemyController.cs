@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour {
         _lastReceiveTime = Time.time;
 
         _receiveTimeIntervals.Add(interval);
-        _receiveTimeIntervals.Remove(0);
+        _receiveTimeIntervals.RemoveAt(0);
     }
 
     public void Shoot(in ShootInfo info) {

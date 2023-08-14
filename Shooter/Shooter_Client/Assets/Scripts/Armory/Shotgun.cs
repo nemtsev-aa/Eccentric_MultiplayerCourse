@@ -12,6 +12,7 @@ public class Shotgun : Weapon {
             if (_numberOfBullets != 0) {
                 Deactivate();
                 Activate();
+                ShowShotEffects();
             }
             return true;
         } else {

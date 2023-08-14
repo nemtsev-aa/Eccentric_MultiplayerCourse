@@ -42,6 +42,7 @@ public class Armory : MonoBehaviour {
         _currentGunIndex = gunIndex;
         _activeWeapon = _weapons[_currentGunIndex];
         _activeWeapon.Activate();
+        _activeWeapon.HideFlash();
 
         OnActiveWeaponChanged?.Invoke(_currentGunIndex);
     }
