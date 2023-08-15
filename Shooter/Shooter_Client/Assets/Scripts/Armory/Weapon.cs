@@ -42,10 +42,12 @@ public class Weapon : MonoBehaviour {
     protected TextMeshProUGUI _bulletsCountText;
     protected Armory _playerArmory;
     private Transform[] _bulletCreatorPoints = new Transform[0];
+    private string _gunslingerID;
 
     public void Init(Armory playerArmory, TextMeshProUGUI bulletsCountText) {
         _playerArmory = playerArmory;
         _bulletsCountText = bulletsCountText;
+        _gunslingerID = MultiplayerManager.Instance.GetSessionID();
 
         if (CreatePointsList() != null) _bulletCreatorPoints = CreatePointsList().ToArray();
     }
@@ -73,7 +75,7 @@ public class Weapon : MonoBehaviour {
 
             foreach (var iPoint in _bulletCreatorPoints) {
                 Bullet newBullet = Instantiate(_bulletPrafab, iPoint.position, iPoint.rotation);
-                newBullet.Init(velocity, _damage);
+                newBullet.Init(velocity, _damage, _gunslingerID);
                 _numberOfBullets--;
             }
 
@@ -126,6 +128,7 @@ public class Weapon : MonoBehaviour {
     }
 
     public virtual void UpdateText() {
+        if (_bulletsCountText == null) return;
         _bulletsCountText.text = $"{_numberOfBullets}";
     }
 

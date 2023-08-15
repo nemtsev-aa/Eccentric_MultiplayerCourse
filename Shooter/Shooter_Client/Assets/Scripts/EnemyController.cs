@@ -53,7 +53,6 @@ public class EnemyController : MonoBehaviour {
                     if ((sbyte)dataChange.Value > (sbyte)dataChange.PreviousValue) _enemyCharacter.RestoreHP((sbyte)dataChange.Value);
                     break;
                 case "wID":
-                    Debug.Log($"wID + {(sbyte)dataChange.Value}");
                     _armory.SetWeaponID((sbyte)dataChange.Value);
                     break;
                 case "pX":

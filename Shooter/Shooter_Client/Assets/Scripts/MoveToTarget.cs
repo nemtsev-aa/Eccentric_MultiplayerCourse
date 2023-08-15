@@ -8,6 +8,7 @@ public class MoveToTarget : MonoBehaviour {
     }
 
     void Update() {
+        if (_target == null) return;
         transform.position = _target.position;
     }
 }

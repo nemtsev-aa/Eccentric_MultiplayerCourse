@@ -47,8 +47,8 @@ public class Armory : MonoBehaviour {
         OnActiveWeaponChanged?.Invoke(_currentGunIndex);
     }
 
-    public void AddBullets(int gunIndex, int numberOfBullets)
-    {
+    public void AddBullets(int gunIndex, int numberOfBullets) {
         _weapons[gunIndex].AddBullets(numberOfBullets);
+        MultiplayerManager.Instance.GetPlayerCharacter().InfoView.ShowInfoMessage(InfoType.AddAmmo);
     }
 }

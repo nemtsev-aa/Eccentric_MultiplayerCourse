@@ -49,10 +49,6 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
         _enemies[shootInfo.key].Shoot(shootInfo);
     }
 
-    private void WeaponChanged(string json) {
-
-    }
-
     private void OnChange(State state, bool isFirstState) {
         if (isFirstState == false) return;
         var player = state.players[_room.SessionId];
@@ -100,6 +96,8 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager> {
     }
 
     public string GetSessionID() => _room.SessionId;
+
+    public PlayerCharacter GetPlayerCharacter() => _player;
 
     protected override void OnDestroy() {
         base.OnDestroy();

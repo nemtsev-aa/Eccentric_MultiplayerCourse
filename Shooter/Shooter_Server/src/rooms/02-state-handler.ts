@@ -7,6 +7,10 @@ export class Player extends Schema {
 
     @type ("uint8")
     loss = 0;
+    @type ("uint8")
+    kill = 0;
+    @type ("uint8")
+    headSh = 0;
 
     @type("int8")
     maxHP = 0;
@@ -92,6 +96,14 @@ export class State extends Schema {
     weaponPlayer (sessionId: string, data: any) {
         this.players.get(sessionId).wID = data.wID;
     }
+
+    killPlayer (sessionId: string, headShot: boolean) {
+        if (headShot == true) {
+            this.players.get(sessionId).headSh += 1;
+        } else {
+            this.players.get(sessionId).kill += 1;
+        }
+    }
 }
 
 export class StateHandlerRoom extends Room<State> {
@@ -125,7 +137,6 @@ export class StateHandlerRoom extends Room<State> {
         this.setState(new State());
 
         this.onMessage("move", (client, data) => {
-            //console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
             this.state.movePlayer(client.sessionId, data);
         });
 
@@ -144,6 +155,8 @@ export class StateHandlerRoom extends Room<State> {
         this.onMessage("damage", (client, data) => {
             const player = this.state.players.get(data.id);
             const clientID = data.id;
+            const gunslingerID = data.gunslingerID;
+            const headShot = data.headShot;
 
             let hp = player.currentHP - data.value;
             if(hp > 0){
@@ -151,6 +164,8 @@ export class StateHandlerRoom extends Room<State> {
                 return;    
             }
 
+            this.state.killPlayer(gunslingerID, headShot);
+            
             player.loss++;
             player.currentHP = player.maxHP;
 

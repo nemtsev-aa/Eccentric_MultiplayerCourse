@@ -1,18 +1,21 @@
 using Colyseus.Schema;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCharacter : Character {
-    [SerializeField] private Health _health;
+    [Header("Move Settings")]
     [SerializeField] private Rigidbody _rigidbody;
-    [SerializeField] private Transform _cameraPoint;
-    [SerializeField] Transform _head;
     [SerializeField] float _minHeadAngle = -90f;
     [SerializeField] float _maxHeadAngle = 90f;
     [SerializeField] private float _jumpForce = 5f;
     [SerializeField] private CheckFly _checkFly;
     [SerializeField] private float _jumpDelay = 0.2f;
+    [Header("Vision Settings")]
+    [SerializeField] private Transform _cameraPoint;
+    [SerializeField] Transform _head;
+    [Header("Services")]
+    [SerializeField] private Health _health;
+    [field: SerializeField] public InfoView InfoView { get; private set; }
 
     private float _inputH;
     private float _inputV;
@@ -77,10 +80,20 @@ public class PlayerCharacter : Character {
             switch (dataChange.Field) {
                 case "loss":
                     MultiplayerManager.Instance.LossCounter.SetPlayerLoss((byte)dataChange.Value);
+                    Debug.Log("OnChange: loss");
+                    InfoView.ShowInfoMessage(InfoType.Restart);
                     break;
                 case "currentHP":
                     _health.SetCurrent((sbyte)dataChange.Value);
-                    break;               
+                    break;
+                case "kill":
+                    Debug.Log("OnChange: kill");
+                    InfoView.ShowInfoMessage(InfoType.Kill);
+                    break;
+                case "headSh":
+                    Debug.Log("OnChange: headSh");
+                    InfoView.ShowInfoMessage(InfoType.HeadShoot);
+                    break;
                 default:
                     Debug.LogWarning($"{dataChange.Field} not handled");
                     break;
@@ -96,9 +109,4 @@ public class PlayerCharacter : Character {
         _rigidbody.AddForce(0, _jumpForce, 0, ForceMode.VelocityChange);
     }
 
-    //Dictionary<string, object> data = new Dictionary<string, object>(){
-    //        { "wID", _currentGunIndex },
-    //    };
-
-    //MultiplayerManager.Instance.SendMessage("wID", data);
 }

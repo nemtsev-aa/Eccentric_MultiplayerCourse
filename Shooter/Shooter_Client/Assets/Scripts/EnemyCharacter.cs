@@ -45,12 +45,14 @@ public class EnemyCharacter : Character {
         transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(_localEulerAnglesY), Time.deltaTime * _rotationSpeed);
     }
 
-    public void ApplyDamage(int damage) {
+    public void ApplyDamage(int damage, string gunslingerID, bool headShot) {
         _health.ApplyDamage(damage);
         Dictionary<string, object> data = new Dictionary<string, object>()
         {
             {"id", _sessionID },
-            {"value", damage }
+            {"value", damage },
+            {"headShot", headShot},
+            {"gunslingerID", gunslingerID }
         };
 
         MultiplayerManager.Instance.SendMessage("damage", data);

@@ -6,7 +6,7 @@ public class Controller : MonoBehaviour {
     
     [SerializeField] private float _restartDelay = 3f;
     [SerializeField] private PlayerCharacter _player;
-    [SerializeField] private Armory _playerArmory;
+    [field: SerializeField] public Armory PlayerArmory { get; private set; }
     [SerializeField] private Squat _squat;
     [SerializeField] private float _mouseSensetivity = 2f;
     private MultiplayerManager _multiplayerManager;
@@ -15,7 +15,7 @@ public class Controller : MonoBehaviour {
 
     private void Start() {
         _multiplayerManager = MultiplayerManager.Instance;
-        _playerArmory.OnActiveWeaponChanged += SendNewWeaponID;
+        PlayerArmory.OnActiveWeaponChanged += SendNewWeaponID;
         _hideCursor = true;
         //Cursor.lockState = CursorLockMode.Locked;
     }
@@ -56,7 +56,7 @@ public class Controller : MonoBehaviour {
         }
 
         
-        if (isShoot && _playerArmory.ActiveWeapon.TryShoot(out ShootInfo shootInfo)) SendShoot(ref shootInfo);
+        if (isShoot && PlayerArmory.ActiveWeapon.TryShoot(out ShootInfo shootInfo)) SendShoot(ref shootInfo);
 
         SendWeaponID();
         SendMove();
@@ -125,22 +125,22 @@ public class Controller : MonoBehaviour {
         //int currentID = _playerArmory.CurrentWeaponID;
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
-            _playerArmory.SetWeaponID(0);
+            PlayerArmory.SetWeaponID(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2)) {
-            _playerArmory.SetWeaponID(1);
+            PlayerArmory.SetWeaponID(1);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3)) {
-            _playerArmory.SetWeaponID(2);
+            PlayerArmory.SetWeaponID(2);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4)) {
-            _playerArmory.SetWeaponID(3);
+            PlayerArmory.SetWeaponID(3);
         }
         else if (Input.GetAxis("Mouse ScrollWheel") >= 0.1f) {
-            _playerArmory.SetWeaponID(true);
+            PlayerArmory.SetWeaponID(true);
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f) {
-            _playerArmory.SetWeaponID(false);
+            PlayerArmory.SetWeaponID(false);
         }
     }
 
@@ -150,7 +150,7 @@ public class Controller : MonoBehaviour {
     }
 
     private void OnDisable() {
-        _playerArmory.OnActiveWeaponChanged -= SendNewWeaponID;
+        PlayerArmory.OnActiveWeaponChanged -= SendNewWeaponID;
     }
 }
 

@@ -7,28 +7,38 @@ public class Bullet : MonoBehaviour {
     [Tooltip("Ёффект попадани€")]
     protected GameObject _hitParticle;
     private int _damage;
-    private int _ricochet;
+    private string _gunslingerID;
 
-    public void Init(Vector3 velocity, int damage = 0) {
+    public void Init(Vector3 velocity, int damage = 0, string gunslingerID = "") {
         _damage = damage;
+        _gunslingerID = gunslingerID;
         _rigidbody.velocity = velocity;
         StartCoroutine(DelayDestroy());
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (collision.collider.TryGetComponent(out EnemyCharacter enemyCharacter)) {
-            enemyCharacter.ApplyDamage(_damage);
+        if (collision.rigidbody == null) {
             Destroy();
+            return;
         }
+
+        if (collision.rigidbody.gameObject.TryGetComponent(out EnemyCharacter enemyCharacter)) {
+            int damage = 0;
+            bool headShot = false;
+            if (collision.collider.gameObject.CompareTag("Body")) {
+                damage = _damage;
+            } else if (collision.collider.gameObject.CompareTag("Head")) {
+                damage = _damage * 2;
+                headShot = true;
+            }
+            enemyCharacter.ApplyDamage(damage, _gunslingerID, headShot); 
+        }
+        Destroy();
     }
 
     private IEnumerator DelayDestroy() {
         yield return new WaitForSecondsRealtime(_lifeTime);
         Destroy();
-    }
-
-    public virtual void Ricochet() {
-        _ricochet++;
     }
 
     private void Destroy() {

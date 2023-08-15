@@ -1,6 +1,8 @@
 using UnityEngine;
 
 public class Health : MonoBehaviour {
+    public int Max => _max;
+    public int Current => _current;
 
     [SerializeField] private HealthUI _healthUI;
     private int _max;
@@ -23,5 +25,11 @@ public class Health : MonoBehaviour {
 
     private void UpdateHP() {
         _healthUI.UpdateHealth(_max, _current);
+    }
+
+    public void AddHealth(int lootValue) {
+        _current += lootValue;
+        if (_current > _max) _current = _max;
+        UpdateHP();
     }
 }

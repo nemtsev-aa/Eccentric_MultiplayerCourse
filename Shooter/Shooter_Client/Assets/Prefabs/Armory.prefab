@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &798704507765478819
 Transform:
   m_ObjectHideFlags: 0
@@ -49,12 +49,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponID: 1
   _bulletCreator: {fileID: 9205704051345528440}
-  _shotPeriod: 0.3
+  _shotPeriod: 0.1
   _numberOfBullets: 50
   _bulletPrafab: {fileID: 846502672773443201, guid: bea65e299d4ec424a9d73d5b37003691,
     type: 3}
-  _speed: 15
-  _damage: 2
+  _speed: 55
+  _damage: 1
   _flash: {fileID: 8982494552525379351}
   _shotSound: {fileID: 798704507765478818}
 --- !u!82 &798704507765478818
@@ -491,8 +491,8 @@ MonoBehaviour:
   _numberOfBullets: 100
   _bulletPrafab: {fileID: 846502672773443201, guid: f215f55a96c2d6a4791550749c42e870,
     type: 3}
-  _speed: 10
-  _damage: 3
+  _speed: 50
+  _damage: 2
   _flash: {fileID: 8982494552525379351}
   _shotSound: {fileID: 2106713322572620482}
 --- !u!82 &2106713322572620482
@@ -1067,7 +1067,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2682970071456822029}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.294, y: 1.166, z: 0.442}
+  m_LocalPosition: {x: 0.294, y: 1.39, z: 0.442}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1094,7 +1094,7 @@ MonoBehaviour:
   _numberOfBullets: 30
   _bulletPrafab: {fileID: 846502672773443201, guid: 82ac3c406eda3e94498a5ce6a1e96c92,
     type: 3}
-  _speed: 7
+  _speed: 70
   _damage: 2
   _flash: {fileID: 8982494552525379351}
   _shotSound: {fileID: 514992532426542345}
@@ -1573,7 +1573,7 @@ MonoBehaviour:
   _numberOfBullets: 3
   _bulletPrafab: {fileID: 846502672773443201, guid: d02c77313cbce8147ae679022e32af4d,
     type: 3}
-  _speed: 10
+  _speed: 50
   _damage: 5
   _flash: {fileID: 0}
   _shotSound: {fileID: 4586750423767378394}
